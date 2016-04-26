@@ -1,9 +1,9 @@
 <resources>
     <string name="app_name">Geoffery</string>
     <string name="action_settings">Settings</string>
-    <string name="section_format">Hello World from section: %1$d</string>
     <string name="main_large_text">This is a fragment</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="editText_Item_Name">Item Name</string>
 </resources>

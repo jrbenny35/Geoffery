@@ -1,14 +1,16 @@
-package layout;
+package com.bennyjrxyz.fourhands.geoffery;
 
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import com.bennyjrxyz.fourhands.geoffery.R;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -18,7 +20,7 @@ import com.bennyjrxyz.fourhands.geoffery.R;
  * Use the {@link MainViewFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MainViewFragment extends Fragment {
+public class MainViewFragment extends Fragment implements View.OnClickListener{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -27,6 +29,12 @@ public class MainViewFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    GeofferyApplication app;
+
+
+    private EditText editItemName, editItemCal, editItemPrice;
+    private Button addFoodBtn;
 
     private OnFragmentInteractionListener mListener;
 
@@ -55,33 +63,44 @@ public class MainViewFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_main_view, container, false);
-    }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
+        View view = inflater.inflate(R.layout.fragment_main_view, container, false);
+        // Inflate the layout for this fragment
+
+        editItemName = (EditText) view.findViewById(R.id.editText_item_Name);
+        editItemCal = (EditText) view.findViewById(R.id.editText_item_cal);
+        editItemPrice = (EditText) view.findViewById(R.id.editText_item_price);
+        addFoodBtn = (Button) view.findViewById(R.id.button_add_food);
+
+        addFoodBtn.setOnClickListener(this);
+        return view;
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        if (getActivity() instanceof OnFragmentInteractionListener) {
+            mListener = (OnFragmentInteractionListener) getActivity();
         } else {
-            throw new RuntimeException(context.toString()
+            throw new RuntimeException(getActivity().toString()
                     + " must implement OnFragmentInteractionListener");
         }
     }
@@ -90,6 +109,22 @@ public class MainViewFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onClick(View v) {
+        Log.d("On Click", "Inside on click method");
+
+        boolean isInserted = app.insertData(editItemName.getText().toString(),
+                editItemCal.getText().toString(),
+                editItemPrice.getText().toString());
+
+        if(isInserted){
+            Toast.makeText(getActivity().getApplicationContext(), "Data Inserted", Toast.LENGTH_LONG).show();
+            Log.d("Database", "Data Inserted");
+
+        } else
+            Toast.makeText(getActivity().getApplicationContext(), "Error!", Toast.LENGTH_LONG).show();
     }
 
     /**
@@ -106,4 +141,5 @@ public class MainViewFragment extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
 }
